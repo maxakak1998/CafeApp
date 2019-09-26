@@ -613,7 +613,7 @@
     pirates "^4.0.0"
     source-map-support "^0.5.9"
 
-"@babel/runtime@^7.0.0", "@babel/runtime@^7.6.0":
+"@babel/runtime@^7.0.0", "@babel/runtime@^7.5.5", "@babel/runtime@^7.6.0":
   version "7.6.0"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.6.0.tgz#4fc1d642a9fd0299754e8b5de62c631cf5568205"
   integrity sha512-89eSBLJsxNxOERC0Op4vd+0Bqm6wRMqMbFtV3i0/fbaWw/mJ8Q3eBvgX0G4SyrOOLCtbu98HspF8o09MRT+KzQ==
@@ -3984,6 +3984,11 @@ locate-path@^3.0.0:
     p-locate "^3.0.0"
     path-exists "^3.0.0"
 
+lodash.debounce@4.0.8:
+  version "4.0.8"
+  resolved "https://registry.yarnpkg.com/lodash.debounce/-/lodash.debounce-4.0.8.tgz#82d79bff30a67c4005ffd5e2515300ad9ca4d7af"
+  integrity sha1-gteb/zCmfEAF/9XiUVMArZyk168=
+
 lodash.sortby@^4.7.0:
   version "4.7.0"
   resolved "https://registry.yarnpkg.com/lodash.sortby/-/lodash.sortby-4.7.0.tgz#edd14c824e2cc9c1e0b0a1b42bb5210516a42438"
@@ -5148,6 +5153,13 @@ prompts@^2.0.1:
     kleur "^3.0.3"
     sisteransi "^1.0.3"
 
+prop-types@15.5.8:
+  version "15.5.8"
+  resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.5.8.tgz#6b7b2e141083be38c8595aa51fc55775c7199394"
+  integrity sha1-a3suFBCDvjjIWVqlH8VXdccZk5Q=
+  dependencies:
+    fbjs "^0.8.9"
+
 prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
@@ -5227,10 +5239,15 @@ react-devtools-core@^3.6.1:
     shell-quote "^1.6.1"
     ws "^3.3.1"
 
-react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.4, react-is@^16.8.6:
+react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.4, react-is@^16.8.6, react-is@^16.9.0:
   version "16.9.0"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.9.0.tgz#21ca9561399aad0ff1a7701c01683e8ca981edcb"
   integrity sha512-tJBzzzIgnnRfEm046qRcURvwQnZVXmuCbscxUO5RWrGTXpon2d4c8mI0D8WE6ydVIm29JiLB6+RslkIvym9Rjw==
+
+react-lifecycles-compat@^3.0.4:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
+  integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
 
 react-native-gesture-handler@^1.4.1:
   version "1.4.1"
@@ -5247,7 +5264,7 @@ react-native-reanimated@^1.2.0:
   resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-1.2.0.tgz#9219227a52a5dfa4d34c324596d6726ccd874293"
   integrity sha512-vkWRHrPK5qfHP/ZawlRoo38oeYe9NZaaOH/lmFxRcsKzaSK6x3H5ZPXI8lK6MfTLveqwo1QhJje3zIKXO4nQQw==
 
-react-native-safe-area-view@^0.14.1:
+react-native-safe-area-view@^0.14.1, react-native-safe-area-view@^0.14.6:
   version "0.14.8"
   resolved "https://registry.yarnpkg.com/react-native-safe-area-view/-/react-native-safe-area-view-0.14.8.tgz#ef33c46ff8164ae77acad48c3039ec9c34873e5b"
   integrity sha512-MtRSIcZNstxv87Jet+UsPhEd1tpGe8cVskDXlP657x6rHpSrbrc+y13ZNXrwAgGNNhqQNX7UJT68ZIq//ZRmvw==
@@ -5267,6 +5284,11 @@ react-native-screens@^2.0.0-alpha.3:
   integrity sha512-SA3uGrc3UM1V9y6gfVU1UPf1a3dMyQCj3p5J7y6g81Of8rV5Pc34s6fWzOKNAWgOiviAktZB1z7Jngdl7+acZg==
   dependencies:
     debounce "^1.2.0"
+
+react-native-tab-view@^2.9.0:
+  version "2.10.0"
+  resolved "https://registry.yarnpkg.com/react-native-tab-view/-/react-native-tab-view-2.10.0.tgz#5e249e5650502010013449ffd4e5edc18a95364b"
+  integrity sha512-qgexVz5eO4yaFjdkmn/sURXgVvaBo6pZD/q1eoca96SbPVbaH3WzVhF3bRUfeTHwZkXwznFTpS3JURqIFU8vQA==
 
 react-native-vector-icons@^6.6.0:
   version "6.6.0"
@@ -5311,6 +5333,28 @@ react-native@0.60.5:
     stacktrace-parser "^0.1.3"
     whatwg-fetch "^3.0.0"
 
+react-navigation-animated-switch@^0.3.2:
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/react-navigation-animated-switch/-/react-navigation-animated-switch-0.3.2.tgz#9867ddf50ebe97702be25d19813ef5deeae68932"
+  integrity sha512-WVkTbxvNkH/D6Rx89aEQXQ65Tkm2hWLiiP9RekNk1Uyhe/s53Xe0tvblAk1nq7tk9+n4ilfbADU5wPUkNPiK1Q==
+
+react-navigation-stack@^1.8.1:
+  version "1.8.1"
+  resolved "https://registry.yarnpkg.com/react-navigation-stack/-/react-navigation-stack-1.8.1.tgz#88602596239b4a238285f3dd1860bb74f7aa2a74"
+  integrity sha512-XOkHuYlQjZKnD4jTU0Ml847sKjpwsJpQ6JX4ZfOq8D0e6fPWXbpYNhvUnzHMHMm+tnbhTqkqP1Umu40Hmx748Q==
+  dependencies:
+    prop-types "^15.7.2"
+
+react-navigation-tabs@^2.5.5:
+  version "2.5.5"
+  resolved "https://registry.yarnpkg.com/react-navigation-tabs/-/react-navigation-tabs-2.5.5.tgz#f651355b140b35ef5753aac434da5e1943abdd26"
+  integrity sha512-oIL5V4agCxcqbWNZzF1h/cm1bxKXNUeGrWaRQEEnuN3TXTEj1SVRz33CnKYg30pVvgF5L2p28sOk15Z4Ao01NQ==
+  dependencies:
+    hoist-non-react-statics "^3.3.0"
+    react-lifecycles-compat "^3.0.4"
+    react-native-safe-area-view "^0.14.6"
+    react-native-tab-view "^2.9.0"
+
 react-navigation@^4.0.3:
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/react-navigation/-/react-navigation-4.0.3.tgz#ba2cacb71db56e22ee50d774829ebc7fa95a0724"
@@ -5326,6 +5370,18 @@ react-proxy@^1.1.7:
   dependencies:
     lodash "^4.6.1"
     react-deep-force-update "^1.0.0"
+
+react-redux@^7.1.1:
+  version "7.1.1"
+  resolved "https://registry.yarnpkg.com/react-redux/-/react-redux-7.1.1.tgz#ce6eee1b734a7a76e0788b3309bf78ff6b34fa0a"
+  integrity sha512-QsW0vcmVVdNQzEkrgzh2W3Ksvr8cqpAv5FhEk7tNEft+5pp7rXxAudTz3VOPawRkLIepItpkEIyLcN/VVXzjTg==
+  dependencies:
+    "@babel/runtime" "^7.5.5"
+    hoist-non-react-statics "^3.3.0"
+    invariant "^2.2.4"
+    loose-envify "^1.4.0"
+    prop-types "^15.7.2"
+    react-is "^16.9.0"
 
 react-refresh@^0.4.0:
   version "0.4.2"
@@ -5413,6 +5469,23 @@ realpath-native@^1.1.0:
   integrity sha512-wlgPA6cCIIg9gKz0fgAPjnzh4yR/LnXovwuo9hvyGvx3h8nX4+/iLZplfUWasXpqD8BdnGnP5njOFjkUwPzvjA==
   dependencies:
     util.promisify "^1.0.0"
+
+recyclerlistview@^2.0.10-beta.3:
+  version "2.0.10-beta.3"
+  resolved "https://registry.yarnpkg.com/recyclerlistview/-/recyclerlistview-2.0.10-beta.3.tgz#a13a08bda5b6e18be17ec889849716cf6ee525a0"
+  integrity sha512-5T/AaNDWumr68KbsO7um4OvXTGZoOizPnnQs7yRUXMpYApC4hD4N9X0wBrClNAWBDjwLKifCdmOTGsyf13DQQg==
+  dependencies:
+    lodash.debounce "4.0.8"
+    prop-types "15.5.8"
+    ts-object-utils "0.0.5"
+
+redux@^4.0.4:
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/redux/-/redux-4.0.4.tgz#4ee1aeb164b63d6a1bcc57ae4aa0b6e6fa7a3796"
+  integrity sha512-vKv4WdiJxOWKxK0yRoaK3Y4pxxB0ilzVx6dszU2W8wLxlb2yikRph4iV/ymtdJ6ZxpBLFbyrxklnT5yBbQSl3Q==
+  dependencies:
+    loose-envify "^1.4.0"
+    symbol-observable "^1.2.0"
 
 regenerate-unicode-properties@^8.1.0:
   version "8.1.0"
@@ -6144,6 +6217,11 @@ symbol-observable@1.0.1:
   resolved "https://registry.yarnpkg.com/symbol-observable/-/symbol-observable-1.0.1.tgz#8340fc4702c3122df5d22288f88283f513d3fdd4"
   integrity sha1-g0D8RwLDEi310iKI+IKD9RPT/dQ=
 
+symbol-observable@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/symbol-observable/-/symbol-observable-1.2.0.tgz#c22688aed4eab3cdc2dfeacbb561660560a00804"
+  integrity sha512-e900nM8RRtGhlV36KGEU9k65K3mPb1WV70OdjfxlG2EAuM1noi/E/BaW/uMhL7bPEssK8QV57vN3esixjUvcXQ==
+
 symbol-tree@^3.2.2:
   version "3.2.4"
   resolved "https://registry.yarnpkg.com/symbol-tree/-/symbol-tree-3.2.4.tgz#430637d248ba77e078883951fb9aa0eed7c63fa2"
@@ -6292,6 +6370,11 @@ trim-right@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/trim-right/-/trim-right-1.0.1.tgz#cb2e1203067e0c8de1f614094b9fe45704ea6003"
   integrity sha1-yy4SAwZ+DI3h9hQJS5/kVwTqYAM=
+
+ts-object-utils@0.0.5:
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/ts-object-utils/-/ts-object-utils-0.0.5.tgz#95361cdecd7e52167cfc5e634c76345e90a26077"
+  integrity sha1-lTYc3s1+UhZ8/F5jTHY0XpCiYHc=
 
 tslib@^1.8.1, tslib@^1.9.0:
   version "1.10.0"
