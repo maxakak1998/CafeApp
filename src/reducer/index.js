@@ -1,9 +1,12 @@
 import {combineReducers} from 'redux';
-const fakeReducer = () => {
-  return 'Fakes';
-};
+import MenuStore from './MenuStore';
+import OrderStore from './OrderStore';
+import OrderWithoutToppingStore from './OrderWithoutToppingStore';
+
 const rootReducer = combineReducers({
-  fakeReducer,
+  MenuStore,
+  OrderStore,
+  OrderWithoutToppingStore,
 });
 
 export default rootReducer;

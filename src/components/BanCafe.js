@@ -1,14 +1,29 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, TouchableNativeFeedback, Text, StyleSheet} from 'react-native';
 
 class BanCafe extends Component {
   render() {
+    const tinhTrangText = this.props.tinhTrang === 'Trống' ? 'black' : 'red';
+    const {navigate} = this.props.navigation;
     return (
-      <View style={styles.container}>
-        <Text>Bàn 1</Text>
-        <Text style={{alignSelf: 'center'}}>Trống</Text>
-      </View>
+      <TouchableNativeFeedback
+        style={{flex: 1}}
+        onPress={() => {
+          navigate('Order');
+        }}>
+        <View style={styles.container}>
+          <Text style={{top: 5, left: 5}}>{`Bàn ${this.props.soBan}`}</Text>
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Text style={{color: tinhTrangText}}>{this.props.tinhTrang}</Text>
+          </View>
+        </View>
+      </TouchableNativeFeedback>
     );
   }
 }
@@ -17,8 +32,9 @@ export default BanCafe;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-
-    justifyContent: 'center',
-    borderRadius: 20,
+    margin: 3,
+    borderRadius: 10,
+    backgroundColor: '#deb887',
+    elevation: 4,
   },
 });

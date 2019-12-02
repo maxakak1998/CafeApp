@@ -7,10 +7,12 @@ import Animated, {Easing} from 'react-native';
 import App from './../../../App';
 import createAnimatedSwitchNavigator from 'react-navigation-animated-switch';
 import {Transition} from 'react-native-reanimated';
-
+import OrderScreen from './../UserApp/Order/index';
+import {RotationGestureHandler} from 'react-native-gesture-handler';
 const UserStack = createStackNavigator(
   {
-    Home: HomeScreen,
+    // Home: HomeScreen,
+    Order: OrderScreen,
   },
   {
     headerMode: 'none',
@@ -40,7 +42,7 @@ const SwitchStack = createAnimatedSwitchNavigator(
   },
 );
 
-const AppContainer = createAppContainer(SwitchStack);
+const AppContainer = createAppContainer(UserStack);
 
 const RootApp = () => {
   return <AppContainer />;
