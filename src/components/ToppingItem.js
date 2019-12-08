@@ -17,6 +17,7 @@ class ToppingItem extends Component {
       activeTab,
       rowIndex,
       topping,
+      _saveOrder,
     } = this.props;
     const isActive = rowIndex === activeTab ? true : false;
     console.log('IS active tab ', isActive);
@@ -28,21 +29,10 @@ class ToppingItem extends Component {
             console.log('On press');
             if (!isActive) {
               changeActiveToppingTab(rowIndex);
-              // luu topping o day ADD_TOPPING action
-              console.log(
-                'Topping in topping item is ',
-                topping,
-                'Data ',
-                data,
-              );
+              _saveOrder();
               addTopping(topping, data.id);
-
-              // de lay duoc idTopping, minh se can truyen
-              // tu ben MenuItem => MenuList => Order => setState topping
-              // roi tu state truyen nguoc lai vao Toppinglist =>Topping Item
-              // THE LA CO TOPPING OBJECT !!!!
+              ToastAndroid.show('Thêm thành công !', ToastAndroid.SHORT);
             }
-            ToastAndroid.show('Thêm thành công !', ToastAndroid.SHORT);
           }}
           checked={isActive}
           containerStyle={{

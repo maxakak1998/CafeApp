@@ -18,6 +18,12 @@ class ToppingList extends Component {
       });
     }
   }
+  componentWillUpdate(nextProps, nextState) {
+    if (this.state.activeToppingTab !== nextState.activeToppingTab) {
+      const {getWhichToppingIsChoosing} = this.props;
+      getWhichToppingIsChoosing(nextState.activeToppingTab.tab);
+    }
+  }
   componentDidMount() {
     this.setState({
       toppingListDataProvider: new DataProvider((r1, r2) => {
@@ -53,9 +59,10 @@ class ToppingList extends Component {
 
   rowRender = (type, data, index) => {
     console.log('DATA TOPPING LIST ', data);
-    const {topping} = this.props;
+    const {topping, _saveOrder} = this.props;
     return (
       <ToppingItem
+        _saveOrder={_saveOrder}
         activeTab={this.state.activeToppingTab.tab}
         changeActiveToppingTab={this.changeActiveToppingTab}
         data={data}

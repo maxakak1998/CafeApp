@@ -103,6 +103,7 @@ class MenuItem extends Component {
       idCat,
       id,
       openToppingModal,
+      ToppingZone,
     } = this.props;
     return (
       <View
@@ -118,31 +119,24 @@ class MenuItem extends Component {
         <TouchableOpacity
           onPress={() => {
             console.log('ID MEnuitem', id);
-
-            if (idCat === 7) {
-              openToppingModal(
-                {
-                  name: name,
-                  idTopping: id,
-                  price: _price,
-                  soLuong: 1,
-                },
-                () => {
-                  this.props.saveOrder({
-                    id: id,
-                    name: name,
-                    soLuong: 1,
-                    size: _sizeState,
-                    price: _price,
-                    idCat: idCat,
-                    topping: [],
-                  });
-                },
-              );
-              //TRUYEN TOPPING O DAY
-              return;
+            const cloneToppingZone = ToppingZone.map(value => {
+              if (value.IdProduct !== 0) {
+                return Object.assign(
+                  {},
+                  {
+                    name: value.NameProduct,
+                    idTopping: value.IdProduct,
+                    price: value.PriceProduct,
+                    soLuong: 0,
+                  },
+                );
+              }
+            });
+            if (cloneToppingZone[0] === undefined) {
+              cloneToppingZone.length = 0;
             }
-            // updateOrderList(name, _sizeState, _price, 1, null, idCat, id);
+
+            console.log(cloneToppingZone);
             this.props.saveOrder({
               id: id,
               name: name,
@@ -150,7 +144,9 @@ class MenuItem extends Component {
               size: _sizeState,
               price: _price,
               idCat: idCat,
-              topping: [],
+              topping: cloneToppingZone,
+              hasJustChanged: false,
+              // toppingZone: ToppingZone,
             });
           }}
           style={{flex: 1}}

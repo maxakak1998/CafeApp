@@ -7,42 +7,71 @@ import {
   Dimensions,
 } from 'react-native';
 import {Icon} from 'react-native-elements';
-const {width, height} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 class ToppingCellModal extends Component {
+  getPrice(price) {
+    console.log('PRICE', price);
+    if (!!price) {
+      if (price > 999) {
+        const priceString = price.toString();
+        const lengthPrice = priceString.length;
+        const addDotPrice =
+          priceString[0] + '.' + priceString.slice(1, lengthPrice) + '.000';
+        return addDotPrice;
+      } else {
+        return price + '.000';
+      }
+    }
+    return 0;
+  }
+
+  addMore = () => {
+    const {addTopping, toppingValue, indexProduct} = this.props;
+
+    addTopping(toppingValue, indexProduct);
+  };
+  minus = () => {
+    const {deleteTopping, toppingValue, indexProduct} = this.props;
+    if (toppingValue.soLuong > 0) {
+      deleteTopping(indexProduct, toppingValue.idTopping);
+    }
+  };
   render() {
-    const {toppingValue, indexProduct, index} = this.props; // da co index product va toppingvalue
-    //tao reducer de xu ly
+    const {toppingValue} = this.props;
+    const _price =
+      toppingValue.soLuong === 0
+        ? toppingValue.price + '.000'
+        : this.getPrice(toppingValue.price);
     return (
-      //   <View style={styles.container}>
-      //     <Text style={styles.text}>{index} </Text>
-      //     <Text style={styles.text}>{toppingValue.name} </Text>
-      //     <Text style={toppingValue.text}> - </Text>
-      //     <Text style={styles.text}>{toppingValue.soLuong}</Text>
-      //     <Icon name="delete" type="material-community" color="black" />
-      //   </View>
-      <TouchableOpacity
-        style={{flex: 1}}
-        activeOpacity={0.6}
-        onPress={() => {}}>
+      <TouchableOpacity style={{flex: 1}} activeOpacity={0.6}>
         <View style={styles.container}>
           <Text
             style={{
               ...styles.text,
-              width: width / 3,
+              width: width * 0.25,
               textAlign: 'center',
             }}>
             {toppingValue.name}
           </Text>
           <View style={styles.soLuongContainerParent}>
             <View style={styles.soLuongContainerChild}>
-              <Icon name="plus-circle" type="material-community" />
+              <Icon
+                onPress={this.addMore}
+                name="plus-circle"
+                type="material-community"
+              />
 
-              <Text style={{...styles.text, marginHorizontal: 8}}>
+              <Text style={{...styles.text, marginHorizontal: 5}}>
                 {toppingValue.soLuong}
               </Text>
 
-              <Icon name="minus-circle" type="material-community" />
+              <Icon
+                onPress={this.minus}
+                name="minus-circle"
+                type="material-community"
+              />
             </View>
+            <Text style={styles.text}>{_price} đ</Text>
           </View>
         </View>
       </TouchableOpacity>
@@ -57,7 +86,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     // backgroundColor: 'yellow',
-    borderWidth: 0.5,
+    borderWidth: 0.2,
     borderBottomColor: 'black',
   },
   text: {
@@ -66,7 +95,7 @@ const styles = StyleSheet.create({
   },
   soLuongContainerParent: {
     flex: 1,
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-around',
     flexDirection: 'row',
     // backgroundColor: 'red',
     alignItems: 'center',

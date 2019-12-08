@@ -152,6 +152,7 @@ class MenuList extends Component {
       IdProduct: id,
       index: _index,
       idCat,
+      Topping: ToppingZone,
     } = data;
     const {openToppingModal} = this.props;
     console.log('Data', data);
@@ -168,6 +169,7 @@ class MenuList extends Component {
         index={_index}
         idCat={idCat}
         openToppingModal={openToppingModal}
+        ToppingZone={ToppingZone}
       />
     );
   };

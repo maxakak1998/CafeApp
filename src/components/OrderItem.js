@@ -17,7 +17,7 @@ class OrderItem extends Component {
   }
 
   addMore = () => {
-    const {soLuong, name, size, price, id, idCat, topping} = this.props;
+    const {soLuong, name, size, price, id, idCat, topping} = this.props.data;
     const _price = price / soLuong;
 
     // updateOrderList(name, size, _price, 1, null, null, id);
@@ -33,7 +33,16 @@ class OrderItem extends Component {
   };
 
   minus = () => {
-    const {soLuong, name, size, price, index, topping, id, idCat} = this.props;
+    const {
+      soLuong,
+      name,
+      size,
+      price,
+      index,
+      topping,
+      id,
+      idCat,
+    } = this.props.data;
     const _price = price / soLuong;
     this.props.saveOrder({
       id: id,
@@ -60,9 +69,21 @@ class OrderItem extends Component {
     }
     return 0;
   }
+
+  getTotalPriceOfTopping(topping) {
+    const totalPrice = topping.reduce((acc, value) => {
+      if (value.soLuong === 0) {
+        return acc;
+      }
+      return acc + value.price;
+    }, 0);
+    return totalPrice;
+  }
   render() {
-    const {price, name, size, soLuong, index, showModal, idCat} = this.props;
-    const _price = this.getPrice(price);
+    const {price, name, size, soLuong, idCat, topping} = this.props.data;
+    const {showModal, index} = this.props;
+    const priceWithTopping = price + this.getTotalPriceOfTopping(topping);
+    const _price = this.getPrice(priceWithTopping);
     return (
       <TouchableOpacity
         style={{flex: 1}}

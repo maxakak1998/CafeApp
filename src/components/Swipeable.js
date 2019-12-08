@@ -10,6 +10,7 @@ class MySwipeable extends Component {
   updateRef = ref => {
     this.swipeable = ref;
   };
+
   renderRemoveButton = (progress, dragX) => {
     // console.log('progress', progress);
     // console.log('draX', dragX);
@@ -43,6 +44,7 @@ class MySwipeable extends Component {
       </Animated.View>
     );
   };
+
   render() {
     const {idCat, children, index, removeItemInOrderList} = this.props;
     return (
@@ -62,15 +64,7 @@ class MySwipeable extends Component {
         }}
         useNativeAnimations={true}
         renderRightActions={idCat !== 7 ? this.renderRemoveButton : null}>
-        <View
-          style={{
-            ...styles.orderListContainer,
-            justifyContent: 'center',
-            alignItems: 'center',
-            flexDirection: 'row',
-          }}>
-          {children}
-        </View>
+        <View style={styles.orderListContainer}>{children}</View>
       </Swipeable>
     );
   }
@@ -88,5 +82,8 @@ const styles = StyleSheet.create({
     flex: 1,
     borderBottomWidth: 0.5,
     borderColor: 'black',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
   },
 });

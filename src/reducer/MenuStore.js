@@ -68,6 +68,7 @@ export default function MenuStore(state = {}, action) {
         imgProduct: imageSource,
         PriceProduct: freePrice,
         IdProduct: id,
+        ToppingZone: Topping,
       } = value;
 
       const extraState = setInitStateForMenuItem(
