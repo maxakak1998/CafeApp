@@ -7,14 +7,23 @@ import {connect} from 'react-redux';
 import * as actions from '../../../actions';
 import {Overlay, Icon, Button} from 'react-native-elements';
 import ToppingListModal from '../../../components/ToppingModal';
-import {thisExpression} from '@babel/types';
+import {firebase} from '@react-native-firebase/database';
+const db = firebase.database();
 const ViewType = {
   OrderListType: 0,
   MenuItemListType: 1,
   CatItemListType: 2,
 };
+
 const {width, height} = Dimensions.get('window');
 class OrderList extends Component {
+  async componentDidMount() {
+    //call api lay order ve
+    // const {saveDataToOrderStore} =this.props;
+    // const result= await fetch("http://coffee.gear.host/api/getDetailBillByIdTable?idTable=4");
+    // const data=await result.json();
+    // saveDataToOrderStore(data);
+  }
   componentWillReceiveProps(nextProps) {
     if (this.props.orderStore !== nextProps.orderStore) {
       console.log('Changed order !!! ', nextProps);
@@ -36,6 +45,7 @@ class OrderList extends Component {
           return r1 !== r2;
         }).cloneWithRows(nextProps.orderStore),
         totalPrice: totalPrice,
+        isLoading: true,
       });
       // this.props.saveAllProductExceptTopping(nextProps.orderStore);
     }
@@ -89,19 +99,46 @@ class OrderList extends Component {
       product.PriceProduct = value.price / value.soLuong;
       product.Quantity = value.soLuong;
       console.log('Order value ', value);
-      product.toppingAdds = value.topping.map(_value => {
-        console.log('Value topping ', _value);
-        topping.IdTopping = _value.idTopping;
-        topping.PriceTopping = _value.price / _value.soLuong;
-        topping.Quantity = _value.soLuong;
-
-        return Object.assign({}, topping);
-      });
+      if (value.topping.length > 0 && value.topping[0].soLuong === 0) {
+        product.toppingAdds = [];
+      } else {
+        product.toppingAdds = value.topping.map(_value => {
+          console.log('Value topping ', _value);
+          topping.IdTopping = _value.idTopping;
+          topping.PriceTopping = _value.price / _value.soLuong;
+          topping.Quantity = _value.soLuong;
+          return Object.assign({}, topping);
+        });
+      }
 
       objectBill.Product.push(Object.assign({}, product));
     });
 
-    console.log('Object bill', objectBill);
+    console.log('Object bill', JSON.stringify(objectBill));
+
+    order.map(async (value, indexOrder) => {
+      await db
+        .ref('OrderBills/B1/Bills')
+        .child(indexOrder.toString())
+        .set({
+          NameProduct: value.name,
+          Size: value.size,
+          SoLuong: value.soLuong,
+          Status: false,
+        });
+      if (value.topping.length === 1 && value.topping[0].soLuong === 0) {
+      } else {
+        value.topping.map(async (_value, indexTopping) => {
+          await db
+            .ref(`OrderBills/B1/Bills/${indexOrder}/Topping`)
+            .child(indexTopping.toString())
+            .set({
+              ToppingName: _value.name,
+              SoLuong: _value.soLuong,
+            });
+        });
+      }
+    });
 
     // const result = await fetch('http://coffee.gear.host/api/addProductToBill', {
     //   method: 'POST',
@@ -110,10 +147,7 @@ class OrderList extends Component {
     //     'Content-Type': 'application/json',
     //   },
     //   body: JSON.stringify({
-    //     IdTable: objectBill.IdTable,
-    //     NameTable: objectBill.NameTable,
-    //     IdAccount: objectBill.IdAccount,
-    //     Product: objectBill.Product,
+    //     objectBill,
     //   }),
     // });
 
@@ -235,8 +269,11 @@ class OrderList extends Component {
             name="silverware-fork-knife"
             type="material-community"
             color="black"
+            onPress={() => {
+              this.props.navigation.navigate('Kitchen');
+            }}
           />
-          <Text style={styles.text}>Bàn 1</Text>
+          <Text style={styles.text}>Bàn của Kiệt</Text>
           <View style={styles.headerRight}>
             <Text style={styles.text}>Tổng tiền: </Text>
             <Text style={{...styles.text, color: 'red'}}>{_totalPrice} đ</Text>

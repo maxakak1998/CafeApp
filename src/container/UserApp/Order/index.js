@@ -172,7 +172,7 @@ class Order extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.orderList}>
-          <OrderList topping={topping} />
+          <OrderList navigation={this.props.navigation} topping={topping} />
         </View>
         <View style={styles.menuList}>
           <View
@@ -183,24 +183,6 @@ class Order extends Component {
           </View>
           <View style={{flex: 1}}>{this.renderMenu()}</View>
         </View>
-        {/* {this.state.chooseTopping && (
-          <Overlay
-            animationType="slide"
-            onBackdropPress={() => {
-              this.setState({chooseTopping: false, activeTabTopping: -1});
-            }}
-            height={height / 2}
-            children={
-              <ToppingList
-                _saveOrder={this.saveOrder}
-                getWhichToppingIsChoosing={this.getWhichToppingIsChoosing}
-                topping={topping}
-              />
-            }
-            windowBackgroundColor="rgba(255, 255, 255, .5)"
-            isVisible={this.state.chooseTopping}
-          />
-        )} */}
       </View>
     );
   }

@@ -9,10 +9,14 @@ import createAnimatedSwitchNavigator from 'react-navigation-animated-switch';
 import {Transition} from 'react-native-reanimated';
 import OrderScreen from './../UserApp/Order/index';
 import {RotationGestureHandler} from 'react-native-gesture-handler';
+import Kitchen from './../UserApp/Kitchen/index';
 const UserStack = createStackNavigator(
   {
-    // Home: HomeScreen,
     Order: OrderScreen,
+
+    Kitchen: Kitchen,
+
+    // Home: HomeScreen,
   },
   {
     headerMode: 'none',

@@ -4,6 +4,7 @@ import {
   GET_ALL_PRODUCT_EXCEPT_TOPPING,
   GET_TOTAL_PRICE,
   DELETE_TOPPING,
+  SAVE_DATA_TO_ORDER_STORE,
 } from '../assets/type';
 import {DELETE_ORDER} from './../assets/type';
 const topping = {
@@ -244,6 +245,11 @@ export default function OrderStore(state = [], action) {
 
     console.log('newState: ', newState);
     return newState.filter(value => value !== undefined);
+  } else if (action.type === SAVE_DATA_TO_ORDER_STORE) {
+    // const {data} = action;
+    // const newState = [...data];
+    // return newState;
+    return state;
   }
   return state;
 }
@@ -306,6 +312,13 @@ function orderListWithoutDuplicatedItem(
 
     return newState.filter(value => value !== undefined);
   }
+
   console.log('FINAL STATE 1 ', newState);
   return list;
 }
+// function formatDataFromAPI(data){
+//   const newState=[...data];
+//   newState.reduce((acc,currentOrder)=>{
+//     const result=acc.map(nextOrder=>{if(currentOrder.IdProduct === nextOrder.IdProduct)})
+//   },[])
+// }
