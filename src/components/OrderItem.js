@@ -17,7 +17,7 @@ class OrderItem extends Component {
   }
 
   addMore = () => {
-    const {soLuong, name, size, price, id, idCat, topping} = this.props.data;
+    const {soLuong, name, size, price, id, topping} = this.props.data;
     const _price = price / soLuong;
 
     // updateOrderList(name, size, _price, 1, null, null, id);
@@ -27,22 +27,13 @@ class OrderItem extends Component {
       soLuong: 1,
       size: size,
       price: _price,
-      idCat: idCat,
+
       topping: topping,
     });
   };
 
   minus = () => {
-    const {
-      soLuong,
-      name,
-      size,
-      price,
-      index,
-      topping,
-      id,
-      idCat,
-    } = this.props.data;
+    const {soLuong, name, size, price, index, topping, id} = this.props.data;
     const _price = price / soLuong;
     this.props.saveOrder({
       id: id,
@@ -50,7 +41,6 @@ class OrderItem extends Component {
       soLuong: -1,
       size: size,
       price: _price,
-      idCat: idCat,
       topping: topping,
     });
   };
@@ -80,7 +70,7 @@ class OrderItem extends Component {
     return totalPrice;
   }
   render() {
-    const {price, name, size, soLuong, idCat, topping} = this.props.data;
+    const {price, name, size, soLuong, topping} = this.props.data;
     const {showModal, index} = this.props;
     const priceWithTopping = price + this.getTotalPriceOfTopping(topping);
     const _price = this.getPrice(priceWithTopping);
@@ -102,25 +92,19 @@ class OrderItem extends Component {
           </Text>
           <View style={styles.soLuongContainerParent}>
             <View style={styles.soLuongContainerChild}>
-              {idCat !== 7 ? (
-                <Icon
-                  onPress={this.addMore}
-                  name="plus-circle"
-                  type="material-community"
-                />
-              ) : null}
-
+              <Icon
+                onPress={this.addMore}
+                name="plus-circle"
+                type="material-community"
+              />
               <Text style={{...styles.text, marginHorizontal: 8}}>
                 {soLuong}
               </Text>
-
-              {idCat !== 7 ? (
-                <Icon
-                  onPress={this.minus}
-                  name="minus-circle"
-                  type="material-community"
-                />
-              ) : null}
+              <Icon
+                onPress={this.minus}
+                name="minus-circle"
+                type="material-community"
+              />
             </View>
             <Text style={styles.text}>{_price} đ</Text>
             <Text style={styles.text}>{size}</Text>

@@ -1,5 +1,11 @@
 import React, {Component} from 'react';
-import {View, Text, Dimensions, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  Dimensions,
+  StyleSheet,
+  ActivityIndicator,
+} from 'react-native';
 import MySwipeable from '../../../components/Swipeable';
 import OrderItem from './../../../components/OrderItem';
 import {RecyclerListView, DataProvider, LayoutProvider} from 'recyclerlistview';
@@ -8,21 +14,249 @@ import * as actions from '../../../actions';
 import {Overlay, Icon, Button} from 'react-native-elements';
 import ToppingListModal from '../../../components/ToppingModal';
 import {firebase} from '@react-native-firebase/database';
+import {API} from './../../../assets/API';
 const db = firebase.database();
 const ViewType = {
   OrderListType: 0,
   MenuItemListType: 1,
   CatItemListType: 2,
 };
+let ToppingsTemp = {};
+var a = [
+  {
+    IdDetailBill: 207,
+    IdDetailTopping: 140,
+    IdProduct: 39,
+    IdTopping: 48,
+    NameProduct: 'Matcha Macchiato',
+    Quantity: 1,
+    Size: 'S',
+    Price: 0,
+    Toppings: [
+      {
+        IdTopping: 0,
+        NameTopping: 'Không có Topping',
+        PriceTopping: 0,
+        QuantityTopping: 0,
+      },
+    ],
+  },
+];
+
+function showbill(bill) {
+  let totalPrice = 0;
+  let temp = 0;
+  let tempIdBillDetail = 0;
+  let active = 0;
+  let j = 0;
+  let iTemp = 0;
+  for (var i = 0; i < bill.length; i++) {
+    if (bill[i].Quantity > 0) {
+      if (active == 0) {
+        (a[i].IdDetailBill = bill[i].IdDetailBill),
+          (a[i].IdDetailTopping = bill[i].IdDetailTopping),
+          (a[i].IdProduct = bill[i].IdProduct),
+          (a[i].NameProduct = bill[i].NameProduct),
+          (a[i].Quantity = bill[i].Quantity),
+          (a[i].Size = bill[i].Size),
+          (a[i].Price = bill[i].Price);
+        // if (bill[i].IdTopping != 0) {
+        a[i].Toppings[j].IdTopping = bill[i].IdTopping;
+        (a[i].Toppings[j].NameTopping = bill[i].NameTopping),
+          (a[i].Toppings[j].PriceTopping = bill[i].PriceTopping),
+          (a[i].Toppings[j].QuantityTopping = bill[i].QuantityTopping),
+          j++;
+        // }
+        totalPrice +=
+          (bill[i].Price + bill[i].PriceTopping * bill[i].QuantityTopping) *
+          bill[i].Quantity;
+        tempIdBillDetail = bill[i].IdDetailBill;
+        temp = bill[i].Price;
+        active = 1;
+        iTemp = i;
+      } else {
+        if (tempIdBillDetail != bill[i].IdDetailBill) {
+          let aTemp = {
+            IdDetailBill: bill[i].IdDetailBill,
+            IdDetailTopping: bill[i].IdDetailTopping,
+            IdProduct: bill[i].IdProduct,
+            NameProduct: bill[i].NameProduct,
+            Quantity: bill[i].Quantity,
+            Size: bill[i].Size,
+            Price: bill[i].Price,
+            Toppings: [],
+          };
+          // if (bill[i].IdTopping != 0) {
+          ToppingsTemp = [
+            {
+              IdTopping: bill[i].IdTopping,
+              NameTopping: bill[i].NameTopping,
+              PriceTopping: bill[i].PriceTopping,
+              QuantityTopping: bill[i].QuantityTopping,
+            },
+          ];
+          // }
+          aTemp.Toppings = ToppingsTemp;
+          totalPrice +=
+            (bill[i].Price + bill[i].PriceTopping * bill[i].QuantityTopping) *
+            bill[i].Quantity;
+          tempIdBillDetail = bill[i].IdDetailBill;
+          temp = bill[i].Price;
+          iTemp = iTemp + 1;
+          a.push(aTemp);
+        } else {
+          if (bill[i].Price == temp) {
+            // if (bill[i].IdTopping != 0) {
+            ToppingsTemp = {
+              IdTopping: bill[i].IdTopping,
+              NameTopping: bill[i].NameTopping,
+              PriceTopping: bill[i].PriceTopping,
+              QuantityTopping: bill[i].QuantityTopping,
+            };
+            // }
+            a[iTemp].Toppings.push(ToppingsTemp);
+          } else {
+            let aTemp = {
+              IdDetailBill: bill[i].IdDetailBill,
+              IdDetailTopping: bill[i].IdDetailTopping,
+              IdProduct: bill[i].IdProduct,
+              NameProduct: bill[i].NameProduct,
+              Quantity: bill[i].Quantity,
+              Size: bill[i].Size,
+              Price: bill[i].Price,
+              Toppings: [],
+            };
+            // if (bill[i].IdTopping != 0) {
+            ToppingsTemp = [
+              {
+                IdTopping: bill[i].IdTopping,
+                NameTopping: bill[i].NameTopping,
+                PriceTopping: bill[i].PriceTopping,
+                QuantityTopping: bill[i].QuantityTopping,
+              },
+            ];
+            // }
+            aTemp.Toppings = ToppingsTemp;
+            totalPrice +=
+              (bill[i].Price + bill[i].PriceTopping * bill[i].QuantityTopping) *
+              bill[i].Quantity;
+            tempIdBillDetail = bill[i].IdDetailBill;
+            temp = bill[i].Price;
+            iTemp = iTemp + 1;
+            a.push(aTemp);
+          }
+        }
+      }
+    }
+  }
+  return a;
+}
 
 const {width, height} = Dimensions.get('window');
+async function getRightData(data) {
+  const dataLength = data.length;
+  const newData = data.map(value => {
+    const cloneToppings = value.Toppings.map(_value =>
+      Object.assign({}, _value),
+    );
+    return Object.assign({}, value, {Toppings: cloneToppings});
+  });
+
+  console.log(
+    'Check if it equal ',
+    newData[0].Toppings[0] === data[0].Toppings[0],
+  );
+
+  for (let productIndex = 0; productIndex < dataLength; productIndex++) {
+    const {Toppings, IdProduct, NameProduct} = data[productIndex];
+    const toppingProductLength = Toppings.length;
+    console.log('Read to fetch');
+    const rightTopping = [];
+
+    const result = await fetch(
+      'http://coffee.gear.host/api/getProductToppingByIdPro?idProduct=' +
+        IdProduct,
+    );
+    const responseJS = await result.json();
+
+    const allTopping = responseJS.Topping;
+    const allToppingLength = allTopping.length;
+    console.log('ALL TOPPING ', allTopping);
+
+    console.log('rightTopping after clear ', rightTopping);
+
+    //product co chua topping
+    for (
+      let toppingProductIndex = 0;
+      toppingProductIndex < toppingProductLength;
+      toppingProductIndex++
+    ) {
+      const toppingProductItem = Toppings[toppingProductIndex];
+      for (
+        let allToppingProductIndex = 0;
+        allToppingProductIndex < allToppingLength;
+        allToppingProductIndex++
+      ) {
+        const allToppingProductItem = allTopping[allToppingProductIndex];
+
+        if (toppingProductItem.IdTopping === allToppingProductItem.IdProduct) {
+          //co roi, chi can cap nhap so luong, push gia tri cu vao
+          if (allToppingProductItem.IdProduct !== 0) {
+            //san pham nay  co the them topping nhung order khong chon topping
+            console.log('Da co ', toppingProductItem);
+            rightTopping.push(toppingProductItem);
+          } else {
+            console.log('Thuc su khong co topping nao ca ! ', NameProduct);
+          }
+        } else {
+          //chua co, lay product tu ben AllTopping
+          console.log('Chua co ', toppingProductItem);
+          rightTopping.push(
+            Object.assign({
+              IdTopping: allToppingProductItem.IdProduct,
+              NameTopping: allToppingProductItem.NameProduct,
+              PriceTopping: allToppingProductItem.PriceProduct,
+              QuantityTopping: allToppingProductItem.Quantity,
+            }),
+          );
+        }
+      }
+    }
+    // newData[productIndex].Toppings.length =0 //cheap
+    newData[productIndex].Toppings = rightTopping.map(value =>
+      Object.assign({}, value),
+    );
+    console.log('NewProduct after changed ', newData[productIndex].Toppings);
+    console.log('rightTopping before clear ', rightTopping);
+  }
+  console.log('New state ', newData);
+  return newData;
+}
 class OrderList extends Component {
   async componentDidMount() {
     //call api lay order ve
-    // const {saveDataToOrderStore} =this.props;
-    // const result= await fetch("http://coffee.gear.host/api/getDetailBillByIdTable?idTable=4");
-    // const data=await result.json();
-    // saveDataToOrderStore(data);
+    const {saveDataToOrderStore} = this.props;
+    this.setState({isLoading: true});
+
+    const result = await fetch(
+      'http://coffee.gear.host/api/getDetailBillByIdTable?idTable=4',
+    );
+    const data = await result.json();
+    console.log('DATA DEtail table ', data);
+    if (data.length !== 0) {
+      const formaArray = showbill(data.Menus);
+      getRightData(formaArray).then(response => {
+        console.log(' getRightData(formaArray)', response);
+        const newState = response;
+        saveDataToOrderStore(newState);
+        // const newState = getRightData(formArray);
+        this.setState({isLoading: false, isAgain: true});
+      });
+
+      // console.log('Show bills ', formArray);
+    }
+
+    // console.log('DATA result ', data);
   }
   componentWillReceiveProps(nextProps) {
     if (this.props.orderStore !== nextProps.orderStore) {
@@ -45,14 +279,20 @@ class OrderList extends Component {
           return r1 !== r2;
         }).cloneWithRows(nextProps.orderStore),
         totalPrice: totalPrice,
-        isLoading: true,
       });
       // this.props.saveAllProductExceptTopping(nextProps.orderStore);
     }
   }
+  // componentDidUpdate(prevProps, prevState) {
+  //   if (this.state.orderListDataProvider !== prevState.orderListDataProvider) {
+  //     this.setState({isLoading: false});
+  //   }
+  // }
   constructor(args) {
     super(args);
     this.state = {
+      isLoading: false,
+      isAgain: false,
       indexItemNeedToTakeTopping: -1,
       orderItem: {},
       isVisible: false,
@@ -88,8 +328,8 @@ class OrderList extends Component {
       toppingAdds: [],
     };
     const objectBill = {
-      IdTable: 4,
-      NameTable: 'Bàn 4',
+      IdTable: 5,
+      NameTable: 'Bàn 5',
       IdAccount: 'an.nd',
       Product: [],
     };
@@ -99,16 +339,28 @@ class OrderList extends Component {
       product.PriceProduct = value.price / value.soLuong;
       product.Quantity = value.soLuong;
       console.log('Order value ', value);
-      if (value.topping.length > 0 && value.topping[0].soLuong === 0) {
+      if (value.topping.length === 1 && value.topping[0].soLuong === 0) {
         product.toppingAdds = [];
       } else {
         product.toppingAdds = value.topping.map(_value => {
           console.log('Value topping ', _value);
-          topping.IdTopping = _value.idTopping;
-          topping.PriceTopping = _value.price / _value.soLuong;
-          topping.Quantity = _value.soLuong;
-          return Object.assign({}, topping);
+          if (_value.soLuong !== 0) {
+            topping.IdTopping = _value.idTopping;
+            topping.PriceTopping = _value.price / _value.soLuong;
+            topping.Quantity = _value.soLuong;
+            return Object.assign({}, topping);
+          }
         });
+
+        product.toppingAdds = product.toppingAdds.filter(
+          value => value !== null,
+        );
+
+        console.log('Topping add afters filtered ', product.toppingAdds);
+
+        product.toppingAdds = product.toppingAdds.filter(
+          value => value !== undefined,
+        );
       }
 
       objectBill.Product.push(Object.assign({}, product));
@@ -116,49 +368,47 @@ class OrderList extends Component {
 
     console.log('Object bill', JSON.stringify(objectBill));
 
-    order.map(async (value, indexOrder) => {
-      await db
-        .ref('OrderBills/B1/Bills')
-        .child(indexOrder.toString())
-        .set({
-          NameProduct: value.name,
-          Size: value.size,
-          SoLuong: value.soLuong,
-          Status: false,
-        });
-      if (value.topping.length === 1 && value.topping[0].soLuong === 0) {
-      } else {
-        value.topping.map(async (_value, indexTopping) => {
-          await db
-            .ref(`OrderBills/B1/Bills/${indexOrder}/Topping`)
-            .child(indexTopping.toString())
-            .set({
-              ToppingName: _value.name,
-              SoLuong: _value.soLuong,
-            });
-        });
-      }
-    });
-
-    // const result = await fetch('http://coffee.gear.host/api/addProductToBill', {
-    //   method: 'POST',
-    //   headers: {
-    //     Accept: 'application/json',
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify({
-    //     objectBill,
-    //   }),
+    // order.map(async (value, indexOrder) => {
+    //   await db
+    //     .ref('OrderBills/B1/Bills')
+    //     .child(indexOrder.toString())
+    //     .set({
+    //       NameProduct: value.name,
+    //       Size: value.size,
+    //       SoLuong: value.soLuong,
+    //       Status: false,
+    //     });
+    //   if (value.topping.length === 1 && value.topping[0].soLuong === 0) {
+    //   } else {
+    //     value.topping.map(async (_value, indexTopping) => {
+    //       await db
+    //         .ref(`OrderBills/B1/Bills/${indexOrder}/Topping`)
+    //         .child(indexTopping.toString())
+    //         .set({
+    //           ToppingName: _value.name,
+    //           SoLuong: _value.soLuong,
+    //         });
+    //     });
+    //   }
     // });
 
-    // console.log('result ', await result.json());
+    const result = await fetch('http://coffee.gear.host/api/addProductToBill', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(objectBill),
+    });
+
+    console.log('JSON', JSON.stringify(objectBill));
+
+    console.log('result ', await result.json());
   };
   orderListRowRender = (type, data, index) => {
-    const {idCat} = data;
     return (
       <MySwipeable
         index={index}
-        idCat={idCat}
         removeItemInOrderList={this.removeItemInOrderList}>
         <View style={styles.viewContainer}>
           <Text style={styles.text}>{index}</Text>
@@ -260,49 +510,59 @@ class OrderList extends Component {
   }
 
   render() {
-    const {totalPrice, orderItem} = this.state;
+    const {totalPrice, isLoading, orderItem} = this.state;
     const _totalPrice = this.getPrice(totalPrice);
-    return (
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <Icon
-            name="silverware-fork-knife"
-            type="material-community"
-            color="black"
-            onPress={() => {
-              this.props.navigation.navigate('Kitchen');
-            }}
-          />
-          <Text style={styles.text}>Bàn của Kiệt</Text>
-          <View style={styles.headerRight}>
-            <Text style={styles.text}>Tổng tiền: </Text>
-            <Text style={{...styles.text, color: 'red'}}>{_totalPrice} đ</Text>
-          </View>
-          {this.renderButtonOrder()}
+    if (isLoading) {
+      return (
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <ActivityIndicator size={20} />
         </View>
-        {this.renderRclOrderList()}
-        {this.state.isVisible && (
-          <Overlay
-            animationType="slide"
-            onBackdropPress={() => {
-              this.setState({isVisible: false});
-            }}
-            children={
-              <ToppingListModal
-                // orderItem={orderItem}
-                deleteTopping={this.props.deleteTopping}
-                indexItemNeedToTakeTopping={
-                  this.state.indexItemNeedToTakeTopping
-                }
-                addTopping={this.props.addTopping}
-              />
-            }
-            windowBackgroundColor="rgba(255, 255, 255, .5)"
-            isVisible={this.state.isVisible}
-          />
-        )}
-      </View>
-    );
+      );
+    } else {
+      return (
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <Icon
+              name="silverware-fork-knife"
+              type="material-community"
+              color="black"
+              onPress={() => {
+                this.props.navigation.navigate('Kitchen');
+              }}
+            />
+            <Text style={styles.text}>Bàn của Kiệt</Text>
+            <View style={styles.headerRight}>
+              <Text style={styles.text}>Tổng tiền: </Text>
+              <Text style={{...styles.text, color: 'red'}}>
+                {_totalPrice} đ
+              </Text>
+            </View>
+            {this.renderButtonOrder()}
+          </View>
+          {this.renderRclOrderList()}
+          {this.state.isVisible && (
+            <Overlay
+              animationType="slide"
+              onBackdropPress={() => {
+                this.setState({isVisible: false});
+              }}
+              children={
+                <ToppingListModal
+                  // orderItem={orderItem}
+                  deleteTopping={this.props.deleteTopping}
+                  indexItemNeedToTakeTopping={
+                    this.state.indexItemNeedToTakeTopping
+                  }
+                  addTopping={this.props.addTopping}
+                />
+              }
+              windowBackgroundColor="rgba(255, 255, 255, .5)"
+              isVisible={this.state.isVisible}
+            />
+          )}
+        </View>
+      );
+    }
   }
 }
 

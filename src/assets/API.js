@@ -6,4 +6,7 @@ export const API = {
   sendBill() {
     return server + '/addProductToBill';
   },
+  getToppingByIdProduct(idProduct) {
+    return server + './getProductToppingByIdPro?idProduct=' + idProduct;
+  },
 };

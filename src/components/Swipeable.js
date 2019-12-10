@@ -32,21 +32,14 @@ class MySwipeable extends Component {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <Icon
-            onPress={() => {}}
-            name="delete"
-            type="antdesign"
-            reverse
-            color="red"
-            size={25}
-          />
+          <Icon name="delete" type="antdesign" reverse color="red" size={25} />
         </View>
       </Animated.View>
     );
   };
 
   render() {
-    const {idCat, children, index, removeItemInOrderList} = this.props;
+    const {children, index, removeItemInOrderList} = this.props;
     return (
       <Swipeable
         ref={this.updateRef}
@@ -57,13 +50,11 @@ class MySwipeable extends Component {
         leftThreshold={200}
         rightThreshold={200}
         onSwipeableRightOpen={() => {
-          if (idCat !== 7) {
-            this.swipeable.close();
-            removeItemInOrderList(index);
-          }
+          this.swipeable.close();
+          removeItemInOrderList(index);
         }}
-        useNativeAnimations={true}
-        renderRightActions={idCat !== 7 ? this.renderRemoveButton : null}>
+        renderRightActions={this.renderRemoveButton}
+        useNativeAnimations={true}>
         <View style={styles.orderListContainer}>{children}</View>
       </Swipeable>
     );

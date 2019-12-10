@@ -20,7 +20,6 @@ const orderItem = {
   soLuong: 0,
   size: '', //no
   price: 0,
-  idCat: 0, //no
   topping: [],
   hasJustChanged: false,
 };
@@ -246,10 +245,53 @@ export default function OrderStore(state = [], action) {
     console.log('newState: ', newState);
     return newState.filter(value => value !== undefined);
   } else if (action.type === SAVE_DATA_TO_ORDER_STORE) {
-    // const {data} = action;
-    // const newState = [...data];
-    // return newState;
-    return state;
+    const {data} = action;
+
+    console.log(
+      'SAVE DATA TO ORDER STORE ',
+      'Data is ',
+      data,
+      'FIRST OBJECT OF DATA',
+      data[2],
+      'Data topping is ',
+      data[2].Toppings,
+    );
+    // console.log(
+    //   'SAVE DATA TO ORDER STORE ',
+    //   'Data topping is ',
+    //   data[0].Toppings,
+    // );
+
+    const newState = data.map(value => {
+      const {IdProduct, NameProduct, Price, Quantity, Size, Toppings} = value;
+      console.log(
+        'SAVE DATA TO ORDER STORE ',
+        'Topping from data is ',
+        Toppings,
+      );
+      orderItem.id = IdProduct;
+      orderItem.name = NameProduct;
+      orderItem.price = Price;
+      orderItem.size = Size;
+      orderItem.soLuong = Quantity;
+      orderItem.topping = Toppings.map(toppingValue => {
+        const {
+          IdTopping,
+          NameTopping,
+          PriceTopping,
+          QuantityTopping,
+        } = toppingValue;
+        topping.idTopping = IdTopping;
+        topping.name = NameTopping;
+        topping.price = PriceTopping;
+        topping.soLuong = QuantityTopping;
+        return Object.assign({}, topping);
+      });
+      const cloneOrderItem = getFreshOrderItem(orderItem);
+      return cloneOrderItem;
+    });
+    console.log('New state in store ', newState);
+    return newState;
   }
   return state;
 }
