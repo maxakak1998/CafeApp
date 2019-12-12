@@ -12,11 +12,10 @@ import {RotationGestureHandler} from 'react-native-gesture-handler';
 import Kitchen from './../UserApp/Kitchen/index';
 const UserStack = createStackNavigator(
   {
+    Home: HomeScreen,
     Order: OrderScreen,
 
     Kitchen: Kitchen,
-
-    // Home: HomeScreen,
   },
   {
     headerMode: 'none',
@@ -35,9 +34,9 @@ const SwitchStack = createAnimatedSwitchNavigator(
     initialRouteName: 'Login',
     transition: (
       <Transition.Together>
-        <Transition.Out type="scale" durationMs={400} interpolation="easeIn" />
+        <Transition.Out type="fade" durationMs={400} interpolation="easeIn" />
         <Transition.In
-          type="scale"
+          type="fade"
           durationMs={1000}
           interpolation="easeInOut"
         />

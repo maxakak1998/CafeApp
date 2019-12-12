@@ -56,6 +56,7 @@ class Order extends Component {
     //lay danh sach cac mon tu api
     this.updateMenuList(0);
   }
+  componentWillUnmount() {}
 
   constructor(props) {
     super(props);

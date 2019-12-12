@@ -6,11 +6,18 @@ class BanCafe extends Component {
   render() {
     const tinhTrangText = this.props.tinhTrang === 'Trống' ? 'black' : 'red';
     const {navigate} = this.props.navigation;
+    const {tenBan, soBan, tinhTrang} = this.props;
     return (
       <TouchableNativeFeedback
         style={{flex: 1}}
         onPress={() => {
-          navigate('Order');
+          navigate('Order', {
+            DataTable: {
+              StatusTable: tinhTrang,
+              NameTable: tenBan,
+              IdTable: soBan,
+            },
+          });
         }}>
         <View style={styles.container}>
           <Text style={{top: 5, left: 5}}>{`Bàn ${this.props.soBan}`}</Text>

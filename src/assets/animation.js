@@ -23,7 +23,7 @@ export const MyLayoutAnimation = {
   OpenAnimation: LayoutAnimation.create(
     700,
     LayoutAnimation.Types.easeIn,
-    LayoutAnimation.Properties.scaleXY,
+    LayoutAnimation.Properties.opacity,
   ),
   ChangeAnimation: LayoutAnimation.create(
     500,

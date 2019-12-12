@@ -162,15 +162,15 @@ async function getRightData(data) {
     return Object.assign({}, value, {Toppings: cloneToppings});
   });
 
-  console.log(
-    'Check if it equal ',
-    newData[0].Toppings[0] === data[0].Toppings[0],
-  );
+  // console.log(
+  //   'Check if it equal ',
+  //   newData[0].Toppings[0] === data[0].Toppings[0],
+  // );
 
   for (let productIndex = 0; productIndex < dataLength; productIndex++) {
     const {Toppings, IdProduct, NameProduct} = data[productIndex];
     const toppingProductLength = Toppings.length;
-    console.log('Read to fetch');
+    // console.log('Read to fetch');
     const rightTopping = [];
 
     const result = await fetch(
@@ -181,9 +181,9 @@ async function getRightData(data) {
 
     const allTopping = responseJS.Topping;
     const allToppingLength = allTopping.length;
-    console.log('ALL TOPPING ', allTopping);
+    // console.log('ALL TOPPING ', allTopping);
 
-    console.log('rightTopping after clear ', rightTopping);
+    // console.log('rightTopping after clear ', rightTopping);
 
     //product co chua topping
     for (
@@ -239,11 +239,12 @@ class OrderList extends Component {
     this.setState({isLoading: true});
 
     const result = await fetch(
-      'http://coffee.gear.host/api/getDetailBillByIdTable?idTable=4',
+      'http://coffee.gear.host/api/getDetailBillByIdTable?idTable=' +
+        this.props.navigation.getParam('DataTable').IdTable,
     );
     const data = await result.json();
     console.log('DATA DEtail table ', data);
-    if (data.length !== 0) {
+    if (data.Menus.length !== 0) {
       const formaArray = showbill(data.Menus);
       getRightData(formaArray).then(response => {
         console.log(' getRightData(formaArray)', response);
@@ -252,8 +253,9 @@ class OrderList extends Component {
         // const newState = getRightData(formArray);
         this.setState({isLoading: false, isAgain: true});
       });
-
       // console.log('Show bills ', formArray);
+    } else {
+      this.setState({isLoading: false, isAgain: false});
     }
 
     // console.log('DATA result ', data);
@@ -288,6 +290,10 @@ class OrderList extends Component {
   //     this.setState({isLoading: false});
   //   }
   // }
+  componentWillUnmount() {
+    const {resetOrderStore} = this.props;
+    resetOrderStore();
+  }
   constructor(args) {
     super(args);
     this.state = {
@@ -316,6 +322,7 @@ class OrderList extends Component {
   };
   sendBillAPI = async order => {
     console.log('orderStore ', order);
+    const {navigation} = this.props;
     const topping = {
       IdTopping: -1,
       PriceTopping: -1,
@@ -328,10 +335,11 @@ class OrderList extends Component {
       toppingAdds: [],
     };
     const objectBill = {
-      IdTable: 5,
-      NameTable: 'Bàn 5',
+      IdTable: navigation.getParam('DataTable').IdTable,
+      NameTable: navigation.getParam('DataTable').NameTable,
       IdAccount: 'an.nd',
       Product: [],
+      Note: 'Không có ghi chú ',
     };
 
     order.map(value => {
@@ -368,29 +376,33 @@ class OrderList extends Component {
 
     console.log('Object bill', JSON.stringify(objectBill));
 
-    // order.map(async (value, indexOrder) => {
-    //   await db
-    //     .ref('OrderBills/B1/Bills')
-    //     .child(indexOrder.toString())
-    //     .set({
-    //       NameProduct: value.name,
-    //       Size: value.size,
-    //       SoLuong: value.soLuong,
-    //       Status: false,
-    //     });
-    //   if (value.topping.length === 1 && value.topping[0].soLuong === 0) {
-    //   } else {
-    //     value.topping.map(async (_value, indexTopping) => {
-    //       await db
-    //         .ref(`OrderBills/B1/Bills/${indexOrder}/Topping`)
-    //         .child(indexTopping.toString())
-    //         .set({
-    //           ToppingName: _value.name,
-    //           SoLuong: _value.soLuong,
-    //         });
-    //     });
-    //   }
-    // });
+    order.map(async (value, indexOrder) => {
+      await db
+        .ref(`OrderBills/B${navigation.getParam('DataTable').IdTable}/Bills`)
+        .child(indexOrder.toString())
+        .set({
+          NameProduct: value.name,
+          Size: value.size,
+          SoLuong: value.soLuong,
+          Status: false,
+        });
+      if (value.topping.length === 1 && value.topping[0].soLuong === 0) {
+      } else {
+        value.topping.map(async (_value, indexTopping) => {
+          await db
+            .ref(
+              `OrderBills/B${
+                navigation.getParam('DataTable').IdTable
+              }/Bills/${indexOrder}/Topping`,
+            )
+            .child(indexTopping.toString())
+            .set({
+              ToppingName: _value.name,
+              SoLuong: _value.soLuong,
+            });
+        });
+      }
+    });
 
     const result = await fetch('http://coffee.gear.host/api/addProductToBill', {
       method: 'POST',

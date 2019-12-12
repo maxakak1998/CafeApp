@@ -10,9 +10,10 @@ const db = firebase.database();
 
 class HomeScreen extends Component {
   async componentDidMount() {
-    await db.ref().on('value', snapshot => {
+    await db.ref('/Tables').on('value', snapshot => {
       const data = snapshot.val();
-      const tableDetail = Object.assign({}, data.ChiTietBan);
+      const tableDetail = Object.assign({}, data);
+      console.log('Table detail ', tableDetail);
       const thongTinCafe = Object.assign({}, data.ThongTinCafe);
       this.setState({
         isLoading: true,
@@ -31,7 +32,6 @@ class HomeScreen extends Component {
       this.setState({isLoading: false});
       console.log('thongTinCafe', this.state.thongTinCafe);
     }
-
     // console.log('CafeInfo', this.state.getCafeInfo);
   }
   constructor(args) {

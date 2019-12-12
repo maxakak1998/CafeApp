@@ -36,12 +36,7 @@ class Kitchen extends Component {
         this.setState({
           kitchenDataProvider: new DataProvider((r1, r2) => {
             return r1 !== r2;
-          }).cloneWithRows([
-            ...finalData,
-            ...finalData,
-            ...finalData,
-            ...finalData,
-          ]),
+          }).cloneWithRows(finalData),
         });
       }
     }
@@ -56,6 +51,7 @@ class Kitchen extends Component {
       }
       return acc;
     }, []);
+    console.log('RESULT AFTER FILTERED ', result);
     return result;
   }
 
@@ -95,6 +91,7 @@ class Kitchen extends Component {
   };
   render() {
     const size = this.state.kitchenDataProvider.getSize();
+    console.log('SIZE ', size);
     return (
       <View style={styles.container}>
         {this.state.isLoading ? (

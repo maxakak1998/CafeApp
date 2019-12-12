@@ -50,9 +50,10 @@ class KitchenItem extends Component {
     );
   }
   renderBills(Bills = []) {
+    console.log('BILSS ', Bills);
     const BillsWithFalseState = Bills.filter(value => value.Status !== true);
     if (BillsWithFalseState.length === 0) {
-      this.props.resetDataSize();
+      // this.props.resetDataSize();
     }
     console.log('BillsWithFalseState ', BillsWithFalseState);
     return BillsWithFalseState.map(order => {

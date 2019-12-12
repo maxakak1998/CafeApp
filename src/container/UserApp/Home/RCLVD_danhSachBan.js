@@ -47,26 +47,32 @@ const floatingButtonDemsion = {
 const {width, height} = Dimensions.get('window');
 class DanhSachBan extends Component {
   componentDidMount() {
-    console.log('tableDetail from props: ', this.props.tableDetail.lau1);
-    // this.setState({tableDetail: this.props.tableDetail.lau1});
+    console.log('tableDetail from props: ', this.props.tableDetail.L1);
+    const {tableDetail} = this.props;
+
+    // this.setState({
+    //   _dataProvider: new DataProvider((r1, r2) => r1 !== r2).cloneWithRows(
+    //     tableDetail.L1,
+    //   ),
+    // });
   }
   componentDidUpdate(prevProps, prevState) {
     if (prevState.switchActive !== this.state.switchActive) {
       let newData = [];
       const fullData =
         this.state.lauActive === 1
-          ? this.props.tableDetail.lau1
-          : this.props.tableDetail.lau2;
+          ? Object.values(this.props.tableDetail.L1)
+          : Object.values(this.props.tableDetail.L2);
       console.log('FullData', fullData);
       if (this.state.switchActive) {
         newData = fullData.filter(table => {
-          if (table.tinhTrang === 'Đang sử dụng') {
+          if (table.StatusTable === 'Có người') {
             return table;
           }
         });
       } else {
         newData = fullData.filter(table => {
-          if (table.tinhTrang === 'Trống') {
+          if (table.StatusTable === 'Trống') {
             return table;
           }
         });
@@ -99,7 +105,7 @@ class DanhSachBan extends Component {
       lauActive: 1,
       _dataProvider: new DataProvider((r1, r2) => {
         return r1 !== r2;
-      }).cloneWithRows(this.props.tableDetail.lau1),
+      }).cloneWithRows(Object.values(this.props.tableDetail.L1)),
     };
     this.openFloatButtonValue = new Value(0);
     this.openFilterButtonValue = new Value(0);
@@ -166,14 +172,16 @@ class DanhSachBan extends Component {
       if (state === State.END) {
         const {_dataProvider} = this.state;
         const {tableDetail: tableDetailProps} = this.props;
-        const {lau1: lau1Data} = tableDetailProps;
-        if (_dataProvider.getAllData() !== lau1Data) {
+        const {L1: lau1Data} = tableDetailProps;
+        const lau1DataArray = Object.values(lau1Data);
+
+        if (_dataProvider.getAllData() !== lau1DataArray) {
           console.log('Yes ! Change it please ');
           this.setState({
             lauActive: 1,
             _dataProvider: new DataProvider((r1, r2) => {
               return r1 !== r2;
-            }).cloneWithRows(lau1Data),
+            }).cloneWithRows(lau1DataArray),
           });
         }
       }
@@ -245,7 +253,7 @@ class DanhSachBan extends Component {
       this.buttonScalingValue = runTiming(new Clock(), 0, 2);
       const {_dataProvider} = this.state;
       const {tableDetail: tableDetailProps} = this.props;
-      const {lau2: lau2Data} = tableDetailProps;
+      const {L2: lau2Data} = tableDetailProps;
 
       console.log('Lau 2');
       // console.log('Data in state', tableDetailState);
@@ -257,14 +265,15 @@ class DanhSachBan extends Component {
       //     return r1 !== r2;
       //   }).cloneWithRows(lau2Data),
       // });
+      const lau2DataArray = Object.values(lau2Data);
       console.log('dataProvider', _dataProvider.getAllData());
-      if (_dataProvider.getAllData() !== lau2Data) {
+      if (_dataProvider.getAllData() !== lau2DataArray) {
         console.log('Yes ! Change it please ');
         this.setState({
           lauActive: 2,
           _dataProvider: new DataProvider((r1, r2) => {
             return r1 !== r2;
-          }).cloneWithRows(lau2Data),
+          }).cloneWithRows(lau2DataArray),
         });
       }
     }
@@ -272,19 +281,21 @@ class DanhSachBan extends Component {
 
   _rowRender = (type, data) => {
     const {navigation} = this.props;
+    console.log('DATA ', data);
     return (
       <BanCafe
         navigation={navigation}
-        tinhTrang={data.tinhTrang}
-        soBan={data.soBan}
+        tinhTrang={data.StatusTable}
+        soBan={data.IdTable}
+        tenBan={data.NameTable}
+        // dataTable={data}
       />
     );
   };
 
   render() {
     // console.log('Render');
-    const textFilter =
-      this.state.switchActive === true ? 'Đang sử dụng' : 'Trống';
+    const textFilter = this.state.switchActive === true ? 'Có người' : 'Trống';
     const widthTextFilter = this.state.switchActive === true ? 6 : 25;
     return (
       <View style={styles.container}>

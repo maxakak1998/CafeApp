@@ -5,6 +5,7 @@ import {
   GET_TOTAL_PRICE,
   DELETE_TOPPING,
   SAVE_DATA_TO_ORDER_STORE,
+  RESET_ORDER_STORE,
 } from '../assets/type';
 import {DELETE_ORDER} from './../assets/type';
 const topping = {
@@ -292,6 +293,8 @@ export default function OrderStore(state = [], action) {
     });
     console.log('New state in store ', newState);
     return newState;
+  } else if (action.type === RESET_ORDER_STORE) {
+    return [];
   }
   return state;
 }
